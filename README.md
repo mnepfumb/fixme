@@ -14,3 +14,7 @@ Imperative programming,
 Object-oriented programming, 
 Adaptation & creativity, 
 Rigor 
+
+# Database
+MariaDB,
+Hibernate
