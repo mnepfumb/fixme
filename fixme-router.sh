@@ -1,0 +1,1 @@
+clear && java -cp fixme-router/target/fixme-router-1.0-SNAPSHOT-jar-with-dependencies.jar za.co.wethinkcode.mnepfumb.fixme.router.Server 5000 5001

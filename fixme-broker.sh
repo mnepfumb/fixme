@@ -1,0 +1,1 @@
+clear && java -cp fixme-broker/target/fixme-broker-1.0-SNAPSHOT.jar za.co.wethinkcode.mnepfumb.fixme.broker.Client

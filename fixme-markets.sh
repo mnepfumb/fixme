@@ -1,0 +1,1 @@
+clear && java -cp fixme-markets/target/fixme-markets-1.0-SNAPSHOT-jar-with-dependencies.jar za.co.wethinkcode.mnepfumb.fixme.market.Markets
