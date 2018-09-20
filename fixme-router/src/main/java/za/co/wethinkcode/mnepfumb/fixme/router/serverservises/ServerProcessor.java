@@ -1,6 +1,5 @@
 package za.co.wethinkcode.mnepfumb.fixme.router.serverservises;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
@@ -10,33 +9,27 @@ import java.util.List;
 public class ServerProcessor 
 {
     private static SocketChannel client;
-    private static List<SocketDetails> brokerSocketDetails = new ArrayList<SocketDetails>();
-	private static List<SocketDetails> marketSocketDetails = new ArrayList<SocketDetails>();
-    private static List<MessageService> messageServiceList = new ArrayList<MessageService>();
+    private static List<SocketDetails> brokerSocketDetails = new ArrayList<>();
+	private static List<SocketDetails> marketSocketDetails = new ArrayList<>();
+    private static List<MessageService> messageServiceList = new ArrayList<>();
 
-    public static String ReadMessage(SelectionKey key)
+    public static String ReadMessage( SelectionKey key )
     {
         String msg;
-        try {
+        try
+        {
             client = ( SocketChannel ) key.channel();
-            ByteBuffer bb = ByteBuffer.allocate( 1024 );
-            client.register(key.selector(), SelectionKey.OP_WRITE);
-            client.read( bb );
-            msg = new String( bb.array() ).trim();
-            return msg;
+            ByteBuffer marketBuffer = ByteBuffer.allocate( 1024 );
+            client.register( key.selector(), SelectionKey.OP_WRITE );
+            client.read( marketBuffer );
+            msg = new String( marketBuffer.array() ).trim();
+            return ( msg );
         } 
-        catch (Exception e) 
+        catch ( Exception e )
         {
             msg = "There was an error processing your message";
-            return msg;
+            return ( msg );
         }
-    }
-
-    public static void KillProcsses( SocketChannel client ) throws IOException
-    {
-        client.close();
-        System.out.println( "Connection closed.../n" );
-        System.out.println( "za.co.wethinkcode.mnepfumb.fixme.router.Server will keep running. Try running another client to re-establish connection\n" );
     }
 
     public static void ProcessSocketDetails( SocketChannel client, SelectionKey key )
@@ -52,25 +45,24 @@ public class ServerProcessor
         {
             marketSocketDetails.add( socketDetails );
         }
-        // System.out.println( "clientKey.attach(buffer): " + clientKey.attach(buffer) + "\n");
     }
 
     public static SocketDetails getBrokerList()
     {
-        for (SocketDetails socket : brokerSocketDetails) 
+        for ( SocketDetails socket : brokerSocketDetails )
         {
-            return socket;
+            return ( socket );
         }
-        return null;
+        return ( null );
     }
 
     public static SocketDetails getMarketList()
     {
-        for ( SocketDetails  socket : marketSocketDetails) {
-
-            return socket;
+        for ( SocketDetails  socket : marketSocketDetails )
+        {
+            return ( socket );
         }
-        return null;
+        return ( null );
     }
 
     public static void ProcessMessageService( String msg, SocketChannel client )
@@ -79,27 +71,27 @@ public class ServerProcessor
         messageServiceList.add( messageService );
     }
 
-    public static void DeleteMeassage( int client_id )
+    public static void DeleteMessage( int client_id )
     {
         int i = 0;
-        for (MessageService msg : messageServiceList)
+        for ( MessageService msg : messageServiceList )
         {
             if ( msg.getId() != client_id )
             {
                 i++;
             }
         }
-        messageServiceList.remove(i);
+        messageServiceList.remove( i );
     }
 
-    public static MessageService getMessage(int client_id )
+    public static MessageService getMessage( int client_id )
     {
-        for (MessageService msg : messageServiceList)
+        for ( MessageService msg : messageServiceList )
         {
             if ( msg.getId() == client_id )
-                return msg;
+                return ( msg );
         }
-        return null;
+        return ( null );
     }
 
     public static boolean WriteMessage( SocketChannel client, String msg )
@@ -107,14 +99,14 @@ public class ServerProcessor
         String message = client.socket().getPort() + " | " + msg;
         try 
         {
-            client.write(ByteBuffer.wrap(message.getBytes()));
-            return true;
+            client.write( ByteBuffer.wrap( message.getBytes() ) );
+            return ( true );
         } 
-        catch (Exception e) 
+        catch ( Exception e )
         {
             System.out.println( "Message was not sent to: ." + client +" There was an error" );
         }
-        return false;
+        return ( false );
         
     }
 }

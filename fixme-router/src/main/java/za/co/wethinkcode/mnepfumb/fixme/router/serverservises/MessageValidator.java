@@ -4,10 +4,9 @@ public class MessageValidator
 {
     public static boolean checkFixMessages( String msg )
     {
-        String[] parts = msg.trim().split("\\|");
+        String[] parts = msg.trim().split( "\\|" );
         int i = 0;
-
-        for (String var: parts)
+        for ( String var: parts )
         {
             System.out.println( var + " " + i );
             i++;
@@ -17,9 +16,9 @@ public class MessageValidator
             return ( false );
 
         if (i > 4)
-            return false;
+            return ( false );
 
-        if (!checkBuySell(parts[0]))
+        if ( !checkBuySell( parts[0] ) )
             return ( false );
 
         if ( !CheckInteger( parts[1] ) )
@@ -27,16 +26,16 @@ public class MessageValidator
         
         if ( !CheckDouble( parts[3] ) )
             return ( false );
-        return true;
+        return ( true );
     }
 
-    private static  boolean checkBuySell(String str)
+    private static  boolean checkBuySell( String str )
     {
-        if (str.trim().equals("buy"))
-            return true;
-        if (str.trim().equals("sell"))
-            return true;
-        return  false;
+        if ( str.trim().equals("buy") )
+            return ( true);
+        if ( str.trim().equals("sell") )
+            return ( true );
+        return  ( false );
     }
     private static boolean CheckInteger( String obj )
     {
@@ -44,9 +43,8 @@ public class MessageValidator
         {
             Integer.parseInt( obj );
         } 
-        catch ( NumberFormatException e ) 
+        catch ( NumberFormatException e )
         {
-            System.out.println( "integer error" );
             return ( false );
         }
         return ( true );
@@ -54,14 +52,12 @@ public class MessageValidator
 
     private static boolean CheckDouble( String obj )
     {
-        
         try 
         {
             Double.parseDouble( obj );
         } 
         catch ( NumberFormatException e ) 
         {
-            System.out.println( "double error" );
             return ( false );
         }
         return ( true );

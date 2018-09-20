@@ -17,21 +17,21 @@ public class MessageService
 
     public int getId()
     {
-        return client_id;
+        return ( client_id );
     }
 
     public String getMsg()
     {
-        return msg;
+        return ( msg );
     }
 
     public SocketChannel getClientSocket()
     {
-        return client;
+        return ( client );
     }
 
     public int getDeleteId( int client_id )
     {
-        return this.client_id = client_id;
+        return ( this.client_id = client_id );
     }
 }

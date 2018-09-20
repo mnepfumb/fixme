@@ -14,12 +14,12 @@ import za.co.wethinkcode.mnepfumb.fixme.router.serverservises.*;
 
 public class Server 
 {
-	public static void main(String[] args)
+	public static void main( String[] args )
 	{
 		ExecutorService executePortService = Executors.newCachedThreadPool();
 		initDatabase();
-		executePortService.submit(new RunServer(5000));
-		executePortService.submit(new RunServer(5001));
+		executePortService.submit( new RunServer( 5000 ) );
+		executePortService.submit( new RunServer( 5001 ) );
 		executePortService.shutdown();
 	}
 
@@ -27,27 +27,23 @@ public class Server
 	{
 		ArrayList<Currency> currencies = getCurrencies();
 
-		for (Currency currency : currencies) 
+		for ( Currency currency : currencies )
 		{
 			Session session = HibernateUtil.getInstance().session;
 			Transaction transaction = session.beginTransaction();
-			session.save(currency);
+			session.save( currency );
 			transaction.commit();
 		}
-
 	}
 
 	public static ArrayList<Currency> getCurrencies()
 	{
 		ArrayList<Currency> currencies = new ArrayList<>();
 
-		currencies.add(new Currency("USD", 10.8, 10));
-		currencies.add(new Currency("ZAR", 9.5, 78));
-		currencies.add(new Currency("GDP", 4.7, 89));
-		currencies.add(new Currency("EUR", 2.9, 100));
-		return currencies;
+		currencies.add( new Currency( "USD", 10.8, 10 ) );
+		currencies.add( new Currency( "ZAR", 9.5, 78 ) );
+		currencies.add( new Currency( "GDP", 4.7, 89 ) );
+		currencies.add( new Currency( "EUR", 2.9, 100 ) );
+		return ( currencies );
 	}
-
-	
-	
 }

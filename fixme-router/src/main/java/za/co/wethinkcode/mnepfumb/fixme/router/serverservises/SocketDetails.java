@@ -1,6 +1,5 @@
 package za.co.wethinkcode.mnepfumb.fixme.router.serverservises;
 
-//import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 
@@ -19,16 +18,16 @@ public class SocketDetails
 
     public SocketChannel getClientSocket()
     {
-        return clientSocket;
+        return ( clientSocket );
     }
 
     public int getClientId()
     {
-        return clientID;
+        return ( clientID );
     }
 
     public SelectionKey getKey()
     {
-        return key;
+        return ( key );
     }
 }

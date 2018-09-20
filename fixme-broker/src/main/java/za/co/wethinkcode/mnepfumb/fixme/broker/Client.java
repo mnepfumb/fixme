@@ -9,22 +9,33 @@ import java.util.*;
 public class Client
 {
     private static BufferedReader input = null;
+    private static String msg;
     
-    public static void main(String[] args) throws Exception 
+    public static void main( String[] args ) throws Exception
     {
-        InetSocketAddress addr = new InetSocketAddress( InetAddress.getByName("localhost"), 5000);
+        InetSocketAddress address = new InetSocketAddress( InetAddress.getByName( "localhost" ), 5000 );
         Selector selector = Selector.open();
         SocketChannel sc = SocketChannel.open();
-        sc.configureBlocking(false);
-        sc.connect(addr);
-        sc.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_WRITE );
-        input = new BufferedReader(new InputStreamReader(System.in));
-        while (true) 
+        sc.configureBlocking( false );
+        sc.connect( address );
+        sc.register( selector, SelectionKey.OP_CONNECT | SelectionKey.OP_WRITE );
+        input = new BufferedReader( new InputStreamReader( System.in ) );
+        while ( true )
         {
-            try {
-                if (selector.select() > 0) 
+            try
+            {
+                boolean temp = processReadySet( selector.selectedKeys() );
+                if ( temp )
+                {
+                    System.out.println("Your connection has been closed" );
+
+                    break;
+                }
+                if ( selector.select() > 0 )
                     continue;
-            } catch (Exception e) {
+            }
+            catch ( Exception e )
+            {
                 sc.close();
             }
             Set<SelectionKey> readySet = selector.selectedKeys();
@@ -32,59 +43,63 @@ public class Client
         }
    }
 
-    public static boolean processReadySet(Set<SelectionKey> readySet) throws Exception
+    public static boolean processReadySet( Set<SelectionKey> readySet ) throws Exception
     {
         SelectionKey key;
         Iterator<SelectionKey> iterator;
         iterator = readySet.iterator();
-        while (iterator.hasNext()) 
+        while ( iterator.hasNext() )
         {
             key = iterator.next();
             iterator.remove();
             
-            if (key.isConnectable()) 
+            if ( key.isConnectable() )
             {
-                Boolean connected = processConnect(key);
-                if (!connected)
+                Boolean connected = processConnect( key );
+                if ( !connected )
                 {
-                    return true;
+                    return ( true );
                 }
-                System.out.println("Broker connected to server\n");                
+                System.out.println( "Broker connected to server\n" );
             }
-            if (key.isReadable()) 
+            if ( key.isReadable() )
             {
                 SocketChannel sc = ( SocketChannel ) key.channel();
-                ByteBuffer bb = ByteBuffer.allocate( 1024 );
-                sc.read(bb);
-                bb.flip();
-                String result = new String( bb.array() ).trim();
+                ByteBuffer ClientBuffer = ByteBuffer.allocate( 1024 );
+                sc.read( ClientBuffer );
+                ClientBuffer.flip();
+                String result = new String( ClientBuffer.array() ).trim();
                 System.out.println( "Message received from Server: " + result + " \n " );
-                sc.register(key.selector(), SelectionKey.OP_WRITE);
+                //Controlling Client shutdown
+                if ( msg.trim().equalsIgnoreCase( "bye" ) )
+                {
+                    return ( true );
+                }
+                sc.register( key.selector(), SelectionKey.OP_WRITE );
+
             }
             if ( key.isWritable() ) 
             {
-                System.out.println("Acceptable message format: buy or sell | currency quantity (5) | currency name (USD) | price (200)\n");
-                System.out.print( "Market message (type exit to stop): " );
-                String msg = input.readLine();
-                SocketChannel sc = ( SocketChannel ) key.channel();
-                ByteBuffer bb = ByteBuffer.wrap( msg.getBytes() );
-                if ( msg != null )
+                System.out.println( "Acceptable message format: buy or sell | currency quantity (5) | currency name (USD) | price (200)\n" );
+                System.out.print( "Broker message (type exit to stop): " );
+                msg = input.readLine();
+                SocketChannel client = ( SocketChannel ) key.channel();
+                ByteBuffer ClientBuffer = ByteBuffer.wrap( msg.getBytes() );
+                if ( msg != null && msg.length() > 0 )
                 {
-                    sc.write( bb );
-                    sc.register(key.selector(), SelectionKey.OP_READ );
+                    client.write( ClientBuffer );
+                    client.register( key.selector(), SelectionKey.OP_READ );
                 }
-                if (msg.equals(null))
-                {
-                    sc.register(key.selector(), SelectionKey.OP_READ );
-                }
-                
+
+
             }
         }
-        return false;
+        return ( false );
     }
 
     public static Boolean processConnect( SelectionKey key )
     {
+
         SocketChannel client = ( SocketChannel ) key.channel();
         try
         {
@@ -96,9 +111,8 @@ public class Client
         catch ( IOException e )
         {
             key.cancel();
-            e.printStackTrace();
-            return false;
+            return ( false );
         }
-        return true;
+        return ( true );
     }
 }

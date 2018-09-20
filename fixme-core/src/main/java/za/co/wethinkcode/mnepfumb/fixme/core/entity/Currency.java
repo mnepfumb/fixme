@@ -3,10 +3,11 @@ package za.co.wethinkcode.mnepfumb.fixme.core.entity;
 import javax.persistence.*;
 
 @Entity
-public class Currency {
+public class Currency
+{
     @Id
-    @Column(updatable = false, nullable = false, length = 100)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column( updatable = false, nullable = false, length = 100 )
+    @GeneratedValue( strategy = GenerationType.AUTO )
     Long Id;
 
     String name;
@@ -19,40 +20,41 @@ public class Currency {
 
     }
 
-    public Currency(String name, double price, int quantity) {
+    public Currency( String name, double price, int quantity )
+    {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public void setName(String name)
+    public void setName( String name )
     {
         this.name = name;
     } 
 
-    public void setPrice(double price)
+    public void setPrice( double price )
     {
         this.price = price;
     }
 
-    public void setQuantity(int quantity)
+    public void setQuantity( int quantity )
     {
         this.quantity = quantity;
     }
 
     public String getName()
     {
-        return name;
+        return ( name );
     }
 
     public double getPrice()
     {
-        return price;
+        return ( price );
     }
 
     public int getQuantity()
     {
-        return quantity;
+        return ( quantity );
     }
 
 }
